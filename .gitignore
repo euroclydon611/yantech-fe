@@ -15,6 +15,7 @@ build
 dist-ssr
 *.local
 .env
+.env.production
 .env.prod
 #vite.config.ts
 
