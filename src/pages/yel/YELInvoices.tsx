@@ -162,7 +162,7 @@ const SummaryCards = () => {
   );
 };
 
-const InvoiceDetailDrawer = ({ invoiceId, open, onClose, onReceiptIssued }: any) => {
+const InvoiceDetailDrawer = ({ invoiceId, open, onClose, onReceiptIssued, onInvoicePdfClick }: any) => {
   const { data, refetch } = useYelInvoiceGetQuery(invoiceId, { skip: !invoiceId || !open });
   const [issueReceipt, { isLoading: issuingReceipt }] = useYelReceiptIssueMutation();
   const [voidReceipt] = useYelReceiptVoidMutation();
@@ -309,7 +309,7 @@ const InvoiceDetailDrawer = ({ invoiceId, open, onClose, onReceiptIssued }: any)
             <div className="flex items-center gap-2">
               <Tooltip title="Download Invoice PDF">
                 <button
-                  onClick={() => { setIncludeBankDetails(false); setPdfModal({ open: true, type: "invoices", id: invoice._id, filename: `YANTEC-${invoice.invoiceNumber}.pdf` }); }}
+                  onClick={() => onInvoicePdfClick?.({ type: "invoices", id: invoice._id, filename: `YANTEC-${invoice.invoiceNumber}.pdf` })}
                   className="text-rose-600 hover:text-rose-800"
                 >
                   <FaFilePdf size={15} />
@@ -678,6 +678,10 @@ const YELInvoices = () => {
         open={!!selectedInvoiceId}
         onClose={() => setSelectedInvoiceId(null)}
         onReceiptIssued={load}
+        onInvoicePdfClick={(info: { type: string; id: string; filename: string }) => {
+          setIncludeBankDetails(false);
+          setPdfModal({ open: true, ...info });
+        }}
       />
 
       {/* ── PDF Download Modal ── */}
