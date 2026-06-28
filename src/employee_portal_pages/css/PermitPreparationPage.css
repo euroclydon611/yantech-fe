@@ -1,0 +1,98 @@
+/* src/pages/PermitPreparationPage.css */
+
+/* 
+  A basic reset and font setting for the entire page for consistency.
+  You might have this in a more global file like index.css or App.css.
+*/
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    background-color: #f1f5f9; /* A light grey background (Slate-100) */
+    color: #334155; /* Default text color (Slate-700) */
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* 
+    The main container for the entire permit form.
+    It centers the content, sets a max-width for readability on large screens,
+    and adds padding.
+  */
+  .permit-container {
+    max-width: 960px; /* A comfortable reading width */
+    margin: 2rem auto; /* Centers the container horizontally with space on top/bottom */
+    padding: 2rem;
+    background-color: #f8fafc; /* A slightly off-white background (Slate-50) */
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* 
+    Styling for the main header of the permit draft.
+    Gives it prominence and visual hierarchy.
+  */
+  .permit-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0; /* Slate-200 */
+  }
+  
+  .permit-header h1 {
+    font-size: 1.75rem; /* 28px */
+    font-weight: 700;
+    color: #1e293b; /* Slate-800 */
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+  
+  /*
+    Styling for the footer containing action buttons.
+    Uses flexbox to align buttons to the right.
+  */
+  .permit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem; /* Space between buttons */
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0; /* Slate-200 */
+  }
+  
+  /* 
+    Base button styles. We'll define specific styles for primary and secondary actions.
+  */
+  .btn-primary, .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+  }
+  
+  /* Primary button style (e.g., "Submit") */
+  .btn-primary {
+    background-color: #2563eb; /* Blue-600 */
+    color: #ffffff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #1d4ed8; /* Blue-700 */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+  
+  /* Secondary button style (e.g., "Save Draft") */
+  .btn-secondary {
+    background-color: #ffffff;
+    color: #475569; /* Slate-600 */
+    border: 1px solid #cbd5e1; /* Slate-300 */
+  }
+  
+  .btn-secondary:hover {
+    background-color: #f1f5f9; /* Slate-100 */
+    border-color: #94a3b8; /* Slate-400 */
+    transform: translateY(-2px);
+  }

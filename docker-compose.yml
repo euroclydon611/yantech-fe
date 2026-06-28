@@ -1,0 +1,16 @@
+services:
+  frontend:
+    image: jodi_drilling_fe
+    build: .
+    container_name: jodi_drilling_fe
+    ports:
+      - "8892:8892"
+    env_file:
+      - .env.prod
+    container_name: jodi_drilling_fe
+    networks:
+      - construction_network
+
+networks:
+  construction_network:
+    driver: bridge

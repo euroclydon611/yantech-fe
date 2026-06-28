@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.node.json",
+  "compilerOptions": {
+    "outDir": "./build/", // Set the output directory
+    "target": "ES2020",
+    "module": "CommonJS", // Use CommonJS for Node.js compatibility
+    "moduleResolution": "node", // Use Node.js module resolution
+    "lib": ["ES2020"],
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "noEmit": false // Ensure that noEmit is false to emit files
+  },
+  "include": ["server.ts"] // Include your server entry file
+}

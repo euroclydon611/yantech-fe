@@ -1,0 +1,554 @@
+import React from "react";
+import styles from "@/employee_portal_pages/css/NotificationReview.module.css";
+import { Typography, Table, Tag } from "antd";
+import { Block, Detail } from "../../../../review/helpers";
+import {
+  formatDate,
+  formatDate4,
+  handleDocumentView,
+  normalizeText,
+} from "@/utils/helperFunction";
+import { SupportingDocumentsGrid } from "@/employee_portal_pages/components/review/supporting-documents-grid";
+import { FileTextOutlined } from "@ant-design/icons";
+import ApplicantInformationBlock from "@/components/general/applicant-information";
+const { Title } = Typography;
+
+interface EnvironmentalMidstreamReviewProps {
+  application: any;
+}
+
+export const EnvironmentalMidstreamPreview: React.FC<
+  EnvironmentalMidstreamReviewProps
+> = ({ application }) => {
+  const { answers } = application;
+
+  const { permitDetails } = answers || {};
+
+  const energyData = answers?.environmentalPermitData?.energy || {};
+  const midstreamData = energyData?.midstream || {};
+
+  const {
+    proposalDetails,
+    siteDetails,
+    infrastructure,
+    impactsMitigation,
+    attachments,
+  } = midstreamData;
+
+  if (!application) {
+    return <div>Loading application details...</div>;
+  }
+
+  // Helper function to format water sources
+  const formatWaterSources = (sources?: string[]) => {
+    if (!sources || sources.length === 0) return "N/A";
+    return sources.join(", ");
+  };
+
+  // Helper function to format power sources
+  const formatPowerSources = (sources?: string[]) => {
+    if (!sources || sources.length === 0) return "N/A";
+    return sources.join(", ");
+  };
+
+  return (
+    <div className={styles.reviewPage}>
+      <div>
+        <Title level={1} className="!text-2xl !font-bold !m-0 text-gray-900">
+          Permit Application Review
+        </Title>
+        <div className="h-1 w-24 bg-green-600 rounded-full mt-3 mb-4"></div>
+      </div>
+
+      <div className={styles.gridContainer}>
+        {/* --- BLOCK 1: Applicant Information --- */}
+        <Block title="1. Applicant Information">
+          <ApplicantInformationBlock application={application} />
+        </Block>
+
+        {/* --- BLOCK 2: Permit Details --- */}
+        <Block title="2. Permit Information">
+          <Detail
+            label="Submitted Date:"
+            value={formatDate4(application.createdAt)}
+          />
+          <Detail
+            label="Updated Date:"
+            value={formatDate4(application.updatedAt)}
+          />
+          <Detail
+            label="Application Type:"
+            value={normalizeText(permitDetails?.applicationType?.toUpperCase())}
+          />
+          <Detail label="Permit Type:" value="ENVIRONMENTAL PERMIT" />
+          <Detail
+            label="Permit Category:"
+            value="ENERGY SECTOR - MIDSTREAM PETROLEUM OPERATIONS"
+          />
+          <Detail
+            label="Midstream Operation Type:"
+            value={normalizeText(energyData?.operationType?.toUpperCase())}
+          />
+        </Block>
+
+        {/* --- BLOCK 3: Proposal Details --- */}
+        <Block title="3. Proposal Details" className={styles.fullWidth}>
+          <Detail
+            label="Project Title:"
+            value={proposalDetails?.title || "N/A"}
+          />
+          <Detail
+            label="Project Description:"
+            value={proposalDetails?.description || "N/A"}
+          />
+          <Detail
+            label="Project Scope:"
+            value={proposalDetails?.scope || "N/A"}
+          />
+        </Block>
+
+        {/* --- BLOCK 4: Project Site & Location --- */}
+        <Block title="4. Project Site & Location" className={styles.fullWidth}>
+          <div className="mb-4">
+            <Title
+              level={4}
+              className="!text-sm !font-semibold !m-0 !mb-4 text-gray-800"
+            >
+              Location Information
+            </Title>
+            <Detail
+              label="Region:"
+              value={normalizeText(siteDetails?.location?.region) || "N/A"}
+            />
+            <Detail
+              label="District:"
+              value={normalizeText(siteDetails?.location?.district) || "N/A"}
+            />
+            <Detail
+              label="City/Town:"
+              value={siteDetails?.location?.city || "N/A"}
+            />
+            <Detail
+              label="Address:"
+              value={siteDetails?.location?.address || "N/A"}
+            />
+            <Detail
+              label="Major Landmark:"
+              value={siteDetails?.location?.majorLandmark}
+            />
+            <Detail
+              label="Google Location Link:"
+              value={
+                siteDetails?.location?.googleLocationLink ? (
+                  <a
+                    href={siteDetails.location.googleLocationLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    View on Google Maps
+                  </a>
+                ) : (
+                  "N/A"
+                )
+              }
+            />
+          </div>
+          {/* Adjacent Land Uses */}
+          {siteDetails?.adjacentLandUses &&
+            siteDetails.adjacentLandUses.length > 0 && (
+              <div className="mb-4">
+                <Title
+                  level={4}
+                  className="!text-sm !font-semibold !m-0 !mb-4 text-gray-800"
+                >
+                  Adjacent Land Uses
+                </Title>
+                <Table
+                  dataSource={siteDetails.adjacentLandUses}
+                  columns={[
+                    {
+                      title: "Direction",
+                      dataIndex: "direction",
+                      key: "direction",
+                      render: (direction: string) => (
+                        <Tag color="blue">{direction}</Tag>
+                      ),
+                    },
+                    {
+                      title: "Description",
+                      dataIndex: "description",
+                      key: "description",
+                    },
+                    {
+                      title: "Distance (m)",
+                      dataIndex: "distance",
+                      key: "distance",
+                    },
+                  ]}
+                  pagination={false}
+                  size="small"
+                  bordered
+                  rowKey="id"
+                />
+              </div>
+            )}
+          <div className="mb-4">
+            <Title
+              level={4}
+              className="!text-sm !font-semibold !m-0 !mb-4 text-gray-800"
+            >
+              Land Use Information
+            </Title>
+            <Detail
+              label="Predominant Land Use:"
+              value={siteDetails?.predominantLandUse || "N/A"}
+            />
+          </div>
+          {/* Near Water Body */}
+          <div className="mt-3">
+            <Detail
+              label="Near Water Body:"
+              value={
+                siteDetails?.nearWaterBody?.isNear ? (
+                  <span>
+                    <Tag color="blue">Yes</Tag>
+                    {siteDetails.nearWaterBody.distance && (
+                      <span className="ml-2">
+                        Distance: {siteDetails.nearWaterBody.distance} metres
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  <Tag color="default">No</Tag>
+                )
+              }
+            />
+          </div>
+          {/* Near Sensitive Area */}
+          <div className="mt-3">
+            <Detail
+              label="Near Environmental Sensitive Area:"
+              value={
+                siteDetails?.nearSensitiveArea?.isNear ? (
+                  <span>
+                    <Tag color="orange">Yes</Tag>
+                    {siteDetails.nearSensitiveArea.distance && (
+                      <span className="ml-2">
+                        Distance: {siteDetails.nearSensitiveArea.distance}{" "}
+                        metres
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  <Tag color="default">No</Tag>
+                )
+              }
+            />
+          </div>
+        </Block>
+
+        {/* --- BLOCK 5: Infrastructure & Utilities --- */}
+        <Block
+          title="5. Infrastructure & Utilities"
+          className={styles.fullWidth}
+        >
+          <Detail
+            label="Structures and Facilities:"
+            value={infrastructure?.structures || "N/A"}
+          />
+
+          <div className="mb-4 mt-4">
+            <Title
+              level={4}
+              className="!text-sm !font-semibold !m-0 !mb-4 text-gray-800"
+            >
+              Water Infrastructure
+            </Title>
+            <Detail
+              label="Water Sources:"
+              value={formatWaterSources(infrastructure?.water?.sources)}
+            />
+            <Detail
+              label="Annual Water Consumption:"
+              value={infrastructure?.water?.annualConsumption || "N/A"}
+            />
+          </div>
+
+          <div className="mb-4">
+            <Title
+              level={4}
+              className="!text-sm !font-semibold !m-0 !mb-4 text-gray-800"
+            >
+              Power Infrastructure
+            </Title>
+            <Detail
+              label="Power Sources:"
+              value={formatPowerSources(infrastructure?.power?.sources)}
+            />
+            {infrastructure?.power?.generatorCapacityKVA && (
+              <Detail
+                label="Generator Capacity:"
+                value={`${infrastructure?.power?.generatorCapacityKVA} KVA`}
+              />
+            )}
+            {infrastructure?.power?.solarCapacityKW && (
+              <Detail
+                label="Solar Capacity:"
+                value={`${infrastructure?.power?.solarCapacityKW} KW`}
+              />
+            )}
+
+            {/* Custom Source Capacities */}
+            {infrastructure?.power?.customSourceCapacities &&
+              Object.keys(infrastructure?.power?.customSourceCapacities)
+                .length > 0 && (
+                <div className="mt-3">
+                  <Title
+                    level={5}
+                    className="!text-xs !font-semibold !m-0 !mb-3 text-gray-700"
+                  >
+                    Custom Power Source Capacities
+                  </Title>
+                  {Object.entries(
+                    infrastructure?.power?.customSourceCapacities
+                  ).map(([sourceName, capacity]) => (
+                    <Detail
+                      key={sourceName}
+                      label={`${sourceName} Capacity:`}
+                      value={capacity}
+                    />
+                  ))}
+                </div>
+              )}
+          </div>
+
+          <Detail
+            label="Draining Provision:"
+            value={infrastructure?.drainingProvision || "N/A"}
+          />
+          <Detail
+            label="Access Road:"
+            value={infrastructure?.accessRoad || "N/A"}
+          />
+          <Detail
+            label="Other Utilities:"
+            value={infrastructure?.otherUtilities || "N/A"}
+          />
+        </Block>
+
+        {/* --- BLOCK 6: Environmental Impacts & Mitigation --- */}
+        <Block
+          title="6. Environmental Impacts & Mitigation"
+          className={styles.fullWidth}
+        >
+          {/* Phase-Based Impacts & Mitigation Measures */}
+          <div className="mb-6">
+            <Title
+              level={4}
+              className="!text-sm !font-semibold !m-0 !mb-4 text-gray-800"
+            >
+              Impacts & Mitigation Measures by Phase
+            </Title>
+
+            {(
+              ["constructionPhase", "operationPhase", "closurePhase"] as const
+            ).map((phase) => {
+              const phaseLabels: Record<string, string> = {
+                constructionPhase: "Construction Phase",
+                operationPhase: "Operation Phase",
+                closurePhase: "Closure/Decommissioning Phase",
+              };
+
+              const phaseData = impactsMitigation?.[phase as keyof any] || {};
+              const pairs = phaseData.impactMeasurePairs || [];
+              const hasData =
+                pairs.length > 0 &&
+                pairs.some(
+                  (pair: any) => pair.impact?.trim() || pair.measures?.trim()
+                );
+
+              return (
+                <div
+                  key={phase}
+                  className="mb-6 pb-6 border-b last:border-b-0 last:pb-0"
+                >
+                  <Title
+                    level={5}
+                    className="!text-xs !font-semibold !m-0 !mb-3 text-gray-700"
+                  >
+                    {phaseLabels[phase]}
+                  </Title>
+
+                  {hasData ? (
+                    <Table
+                      dataSource={pairs}
+                      columns={[
+                        {
+                          title: "Environmental Impact",
+                          dataIndex: "impact",
+                          key: "impact",
+                          width: "50%",
+                          render: (text) => text || "—",
+                        },
+                        {
+                          title: "Mitigation Measures",
+                          dataIndex: "measures",
+                          key: "measures",
+                          width: "50%",
+                          render: (text) => text || "—",
+                        },
+                      ]}
+                      pagination={false}
+                      size="small"
+                      bordered
+                      rowKey={(_, index) => index}
+                    />
+                  ) : (
+                    <p className="text-gray-500 italic">
+                      No impacts and mitigation measures documented for this
+                      phase
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </Block>
+
+        {/* --- BLOCK 7: Stakeholder Consultation --- */}
+        <Block title="7. Stakeholder Consultation" className={styles.fullWidth}>
+          {/* Stakeholders Table */}
+          {impactsMitigation?.stakeholderConsultation?.stakeholders &&
+            impactsMitigation.stakeholderConsultation.stakeholders.length >
+              0 && (
+              <div className="mt-4">
+                <Title
+                  level={4}
+                  className="!text-sm !font-semibold !m-0 !mb-4 text-gray-800"
+                >
+                  Stakeholders Consulted
+                </Title>
+                <Table
+                  dataSource={
+                    impactsMitigation.stakeholderConsultation.stakeholders
+                  }
+                  columns={[
+                    {
+                      title: "Name",
+                      dataIndex: "name",
+                      key: "name",
+                    },
+                    {
+                      title: "Contact",
+                      dataIndex: "contact",
+                      key: "contact",
+                    },
+                    {
+                      title: "Location In Relation To Project Site",
+                      dataIndex: "relationToProject",
+                      key: "relationToProject",
+                    },
+                    {
+                      title: "Concerns",
+                      dataIndex: "concerns",
+                      key: "concerns",
+                    },
+                    {
+                      title: "Response Action",
+                      dataIndex: "responseAction",
+                      key: "responseAction",
+                    },
+                  ]}
+                  pagination={false}
+                  size="small"
+                  bordered
+                  rowKey="id"
+                  scroll={{ x: 1000 }}
+                />
+              </div>
+            )}
+
+          {/* Evidence of Consultation Document */}
+          {attachments?.evidenceOfConsultation && (
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <Title
+                level={4}
+                className="!text-sm !font-semibold !m-0 !mb-4 text-gray-800"
+              >
+                Evidence of Stakeholder Consultation
+              </Title>
+              <div className="flex items-center space-x-2 mt-1 text-red-600">
+                <FileTextOutlined />
+                <span>
+                  {attachments?.evidenceOfConsultation.name || "document"}{" "}
+                  attached — refer to{" "}
+                  <strong>Block 8 (Supporting Documents)</strong>
+                </span>
+              </div>
+            </div>
+          )}
+        </Block>
+
+        {permitDetails?.applicationType === "renewal" && (
+          <Block
+            title="7. Previous Permit Information"
+            className={styles.fullWidth}
+          >
+            {midstreamData?.previousPermit ? (
+              <div className="space-y-4">
+                <Detail
+                  label="Permit Number:"
+                  value={midstreamData.previousPermit.permitNumber || "N/A"}
+                />
+                <Detail
+                  label="Issue Date:"
+                  value={
+                    midstreamData.previousPermit.permitIssuedDate
+                      ? formatDate(
+                          midstreamData.previousPermit.permitIssuedDate
+                        )
+                      : "N/A"
+                  }
+                />
+                <Detail
+                  label="Expiry Date:"
+                  value={
+                    midstreamData.previousPermit.permitExpiryDate
+                      ? formatDate(
+                          midstreamData.previousPermit.permitExpiryDate
+                        )
+                      : "N/A"
+                  }
+                />
+                {midstreamData.previousPermit.permitDocument && (
+                  <div className="mt-4">
+                    <label className="font-semibold text-gray-700 block mb-2">
+                      Permit Document:
+                    </label>
+                    <span className="text-red-600">
+                      Document attached — refer to{" "}
+                      <strong>Block 8 (Supporting Documents)</strong>
+                    </span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Detail label="Previous Permit Information:" value="N/A" />
+            )}
+          </Block>
+        )}
+
+        {/* --- BLOCK 8: Supporting Documents --- */}
+        <Block title="8. Supporting Documents" className={styles.fullWidth}>
+          <SupportingDocumentsGrid
+            attachments={application?.attachments}
+            onDocumentView={handleDocumentView}
+          />
+        </Block>
+      </div>
+    </div>
+  );
+};
+
+export default EnvironmentalMidstreamPreview;

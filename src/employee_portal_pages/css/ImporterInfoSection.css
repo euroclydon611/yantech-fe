@@ -1,0 +1,116 @@
+/* src/components/permit-preparation/ImporterInfoSection.css */
+
+/* Use a root selector to define variables for easy theme changes */
+:root {
+    --color-primary: #3b82f6; /* Blue-500 */
+    --color-primary-light: rgba(59, 130, 246, 0.4);
+  
+    --color-highlight-bg: #fef9c3;      /* Amber-100 */
+    --color-highlight-border: #f59e0b; /* Amber-500 */
+    --color-highlight-text: #b45309;   /* Amber-700 */
+    --color-highlight-focus-border: #d97706; /* Amber-600 */
+    --color-highlight-focus-shadow: rgba(245, 158, 11, 0.4);
+  
+    --color-text-label: #475569;   /* Slate-600 */
+    --color-text-heading: #1e293b; /* Slate-800 */
+    --color-border-light: #e2e8f0; /* Slate-200 */
+    --color-border-medium: #cbd5e1; /* Slate-300 */
+    --color-background-light: #ffffff;
+  }
+  
+  /* 
+    Main container for a form section.
+    Provides padding, border, and a subtle shadow for depth.
+  */
+  .permit-section {
+    background-color: var(--color-background-light);
+    border: 1px solid var(--color-border-light);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+  
+  /* 
+    Section heading style.
+    Includes a bottom border to visually separate it from the content.
+  */
+  .permit-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-heading);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+  
+  /* 
+    CSS Grid for aligning form fields.
+    It's responsive and robust. `gap` provides consistent spacing.
+  */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
+    gap: 1.5rem; /* Spacing between grid items */
+  }
+  
+  /* 
+    A container for a label-input pair.
+    Using flexbox to stack the label on top of the input.
+  */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Utility class to make a form group span all columns in the grid. */
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+  
+  /* Styling for the form field labels. */
+  .form-label {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    color: var(--color-text-label);
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Styling for the text input fields. */
+  .form-input {
+    width: 100%;
+    padding: 0.75rem 1rem; /* Generous padding for easy clicking */
+    font-size: 1rem;      /* 16px */
+    line-height: 1.5;
+    color: #334155; /* Slate-700 */
+    background-color: var(--color-background-light);
+    border: 1px solid var(--color-border-medium);
+    border-radius: 6px;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  /* Focus state for standard inputs for better accessibility and UX. */
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+  }
+  
+  /* --- Highlighting Styles for Required Officer Input --- */
+  
+  /* Targets the container to apply styles to both label and input */
+  .form-group.highlighted .form-label {
+    color: var(--color-highlight-text);
+    font-weight: 600;
+  }
+  
+  .form-group.highlighted .form-input {
+    background-color: var(--color-highlight-bg);
+    border-color: var(--color-highlight-border);
+  }
+  
+  .form-group.highlighted .form-input:focus {
+    border-color: var(--color-highlight-focus-border);
+    box-shadow: 0 0 0 3px var(--color-highlight-focus-shadow);
+  }

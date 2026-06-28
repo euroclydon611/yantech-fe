@@ -1,0 +1,101 @@
+
+:root {
+    --color-primary: #0A1628;
+    --color-accent: #F5A623;
+    --color-dark: #0A1628;
+    --loader-page-bg: rgba(10, 22, 40, 0.96);
+    --loader-text-color: rgba(255, 255, 255, 0.75);
+  }
+  
+  .page-loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(160deg, #0A1628 0%, #0D2244 55%, #0A1628 100%);
+    backdrop-filter: blur(3px);
+  }
+  
+  .page-loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .page-loader-logo {
+    height: 80px; 
+    width: auto;
+    animation: logo-float 3s ease-in-out infinite;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  }
+  
+  .dots-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; 
+    height: 16px; 
+  }
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: dot-pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .dot:nth-child(1) {
+    background-color: #F5A623;
+    animation-delay: 0s;
+  }
+
+  .dot:nth-child(2) {
+    background-color: #ffffff;
+    animation-delay: 0.3s;
+  }
+
+  .dot:nth-child(3) {
+    background-color: #1A3A6B;
+    animation-delay: 0.6s;
+  }
+  
+  .page-loader-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--loader-text-color);
+    margin: 0;
+  }
+  
+  /* --- Keyframe Animations --- */
+  
+  @keyframes logo-float {
+    0%, 100% {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-12px);
+      opacity: 0.95;
+    }
+  }
+  
+  @keyframes dot-pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+  }

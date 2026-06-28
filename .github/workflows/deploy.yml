@@ -1,0 +1,77 @@
+name: Deploy Staff Frontend to ECS
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Create production env
+        run: |
+          cat > .env << 'EOF'
+          VITE_MAIN_SERVER=https://api.epa.gov.gh
+          VITE_PUBLIC_SERVER_URI=https://api.epa.gov.gh/api/main/
+          VITE_PUBLIC_SERVER_URI_HR=https://api.epa.gov.gh/api/hremployees/
+          VITE_PUBLIC_SERVER_URI_REVENUE=https://api.epa.gov.gh/api/revenue/
+          VITE_PUBLIC_SERVER_URI_ACCOUNTS=https://api.epa.gov.gh/api/accounts/
+          VITE_PUBLIC_SERVER_URI_FINANCE=https://api.epa.gov.gh/api/finance/
+          VITE_PUBLIC_SERVER_URI_INVENTORY=https://api.epa.gov.gh/api/inventory/
+          VITE_PUBLIC_SERVER_URI_CATALOG=https://api.epa.gov.gh/api/catalog/
+          VITE_FIREBASE_API_KEY=AIzaSyC3XYAsuNPV_9temHxzyNnDuv5RQG5wWhc
+          VITE_FIREBASE_AUTH_DOMAIN=epa--revgen.firebaseapp.com
+          VITE_FIREBASE_PROJECT_ID=epa--revgen
+          VITE_FIREBASE_STORAGE_BUCKET=epa--revgen.firebasestorage.app
+          VITE_FIREBASE_MESSAGING_SENDER_ID=620240920804
+          VITE_FIREBASE_APP_ID=1:620240920804:web:9fc4508031c9034d414cf1
+          VITE_FIREBASE_MEASUREMENT_ID=G-G3ZNEK88BB
+          VITE_FIREBASE_VPID_KEY=BIF6zstactWurX1rUmcmS0iiXhu1T7ZhryBx9z2E05xHOXW5gBZhfGL7oJ-hbsW5dngIn1rhS1m6G-CblXh7LFU
+          EOF
+
+      - name: Build with increased memory
+        run: |
+          export NODE_OPTIONS="--max-old-space-size=4096"
+          npm run build
+          npm run build:server
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: epa-ghana-staff-fe-prod
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service \
+            --cluster epa-ghana-cluster-prod \
+            --service epa-ghana-staff-fe-prod \
+            --force-new-deployment

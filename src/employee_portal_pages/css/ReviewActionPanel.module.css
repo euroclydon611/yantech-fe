@@ -1,0 +1,243 @@
+/* ReviewActionPanel.module.css */
+
+.actionPanel {
+  width: 200px;
+  background: #f8f8f8;
+  border-left: 1px solid #e0e0e0;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.actionSection {
+  background: white;
+  border: 1px solid #e0e0e0;
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 5px;
+}
+
+.actionTitle {
+  font-size: 11px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 11px;
+  background: white;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 10px;
+  resize: vertical;
+  font-family: Arial, sans-serif;
+  color: #333;
+  line-height: 1.4;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.textarea::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* Feedback Messages */
+.feedback {
+  font-size: 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.saving {
+  background: #ffc107;
+  color: #333;
+}
+
+.saved {
+  background: #28a745;
+  color: white;
+}
+
+.error {
+  background: #dc3545;
+  color: white;
+}
+
+/* Status Badge Styling (if needed for status display) */
+.statusBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.statusPending {
+  background: #ffc107;
+  color: #333;
+}
+
+.statusComplete {
+  background: #28a745;
+  color: white;
+}
+
+.statusIncomplete {
+  background: #fd7e14;
+  color: white;
+}
+
+.statusApproved {
+  background: #28a745;
+  color: white;
+}
+
+.statusRejected {
+  background: #dc3545;
+  color: white;
+}
+
+.statusCorrectionRequired {
+  background: #6f42c1;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .actionPanel {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #e0e0e0;
+    flex-direction: row;
+    gap: 15px;
+    padding: 12px;
+  }
+  
+  .actionSection {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .titleContainer {
+    margin-bottom: 8px;
+  }
+  
+  .actionTitle {
+    font-size: 10px;
+  }
+  
+  .textarea {
+    min-height: 50px;
+  }
+}
+
+
+
+@media (max-width: 480px) {
+  .actionPanel {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .actionSection {
+    flex: none;
+  }
+  
+  .feedback {
+    font-size: 8px;
+  }
+}
+
+/* Accessibility */
+.select:focus-visible,
+.textarea:focus-visible {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Loading States */
+.select:disabled,
+.textarea:disabled {
+  background: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Animation for feedback messages */
+.feedback {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover effects */
+.select:hover:not(:disabled) {
+  border-color: #999;
+}
+
+.textarea:hover:not(:disabled) {
+  border-color: #999;
+}
+
+/* Make sure the panel doesn't break in print */
+@media print {
+  .actionPanel {
+    display: none;
+  }
+}

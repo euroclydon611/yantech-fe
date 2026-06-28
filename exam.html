@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Document for Transboundary Movements/Shipments of Waste</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.4;
+            color: #2c3e50;
+            background: #f8f9fa;
+            font-size: 12px;
+        }
+
+        .review-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .main-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 10px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .block {
+            border: 1px solid #bdc3c7;
+            background: white;
+            position: relative;
+            display: flex;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .data-section {
+            flex: 1;
+            padding: 15px;
+        }
+
+        .block-title {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #2c3e50;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 5px;
+        }
+
+        .block-content {
+            font-size: 11px;
+        }
+
+        .detail {
+            display: flex;
+            margin-bottom: 8px;
+            align-items: flex-start;
+        }
+
+        .label {
+            font-weight: 600;
+            min-width: 120px;
+            color: #34495e;
+            margin-right: 10px;
+        }
+
+        .value {
+            flex: 1;
+            color: #2c3e50;
+        }
+
+        .checkbox-group {
+            margin: 10px 0;
+        }
+
+        .checkbox-group span {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+
+        .checkbox-group div {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 5px;
+            transform: scale(1.1);
+        }
+
+        .carrier-item, .sub-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ecf0f1;
+            background: #f8f9fa;
+        }
+
+        .carrier-item p, .sub-item p {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .countries-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .countries-table th,
+        .countries-table td {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .countries-table th {
+            background: #ecf0f1;
+            font-weight: bold;
+            font-size: 11px;
+            color: #2c3e50;
+        }
+
+        .countries-table td {
+            font-size: 11px;
+        }
+
+        .declaration-text {
+            font-size: 11px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 3px solid #34495e;
+        }
+
+        .signature-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .signature-area em {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .review-action-panel {
+            width: 200px;
+            border-left: 1px solid #bdc3c7;
+            padding: 15px;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .review-section {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            background: white;
+        }
+
+        .review-section h4 {
+            font-size: 11px;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            text-transform: uppercase;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-pending { background: #f39c12; color: white; }
+        .status-approved { background: #27ae60; color: white; }
+        .status-rejected { background: #e74c3c; color: white; }
+        .status-incomplete { background: #e67e22; color: white; }
+        .status-complete { background: #2ecc71; color: white; }
+        .status-correction { background: #9b59b6; color: white; }
+
+        .status-select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #bdc3c7;
+            font-size: 10px;
+            margin-bottom: 8px;
+        }
+
+        .comment-textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 5px;
+            border: 1px solid #bdc3c7;
+            font-size: 10px;
+            resize: vertical;
+        }
+
+        .update-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            font-size: 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            text-transform: uppercase;
+        }
+
+        .update-btn:hover {
+            background: #2980b9;
+        }
+
+        .notification-number {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        @media print {
+            body { background: white; }
+            .review-page { box-shadow: none; }
+            .review-action-panel { display: none; }
+            .block { display: block; }
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .signature-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .block {
+                flex-direction: column;
+            }
+            
+            .review-action-panel {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #bdc3c7;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="review-page">
+        <h2 class="main-title">
+            Notification Document for Transboundary Movements/Shipments of Waste
+        </h2>
+        
+        <div class="grid-container">
+            <!-- Block 1: Exporter - notifier -->
+            <div class="block">
+                <div class="data-section">
+                    <h3 class="block-title">1. Exporter - notifier</h3>
+                    <div class="block-content">
+                        <div class="detail">
+                            <span class="label">Registration No:</span>
+                            <span class="value">EXP-2024-001</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Name:</span>
+                            <span class="value">Global Waste Solutions Ltd.</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Address:</span>
+                            <span class="value">123 Industrial Avenue, Export City, EC 12345</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Contact Person:</span>
+                            <span class="value">John Smith</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Email:</span>
+                            <span class="value">j.smith@globalwaste.com</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Telephone:</span>
+                            <span class="value">+1-555-0123</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Fax:</span>
+                            <span class="value">+1-555-0124</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-action-panel">
+                    <div class="review-section">
+                        <h4>Review Status</h4>
+                        <span class="status-indicator status-pending">Pending</span>
+                        <select class="status-select">
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="correction_required">Correction Required</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Review comments..."></textarea>
+                        <button class="update-btn">Update Review</button>
+                    </div>
+                    <div class="review-section">
+                        <h4>Evaluation Status</h4>
+                        <span class="status-indicator status-pending">Pending</span>
+                        <select class="status-select">
+                            <option value="pending">Pending</option>
+                            <option value="complete">Complete</option>
+                            <option value="incomplete">Incomplete</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Evaluation notes..."></textarea>
+                        <button class="update-btn">Update Evaluation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Block 3: Notification -->
+            <div class="block">
+                <div class="data-section">
+                    <h3 class="block-title">3. Notification</h3>
+                    <div class="block-content">
+                        <div class="detail">
+                            <span class="label">No:</span>
+                            <span class="value notification-number">PENDING GENERATION</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <span>Notification concerning:</span>
+                            <div>
+                                <div><input type="checkbox" checked readonly> A.(i) Individual shipment</div>
+                                <div><input type="checkbox" readonly> (ii) Multiple shipments</div>
+                            </div>
+                            <div>
+                                <div><input type="checkbox" readonly> B.(i) Disposal</div>
+                                <div><input type="checkbox" checked readonly> (ii) Recovery</div>
+                            </div>
+                            <div>
+                                <span>C. Pre-consented recovery facility:</span>
+                                <div><input type="checkbox" readonly> Yes</div>
+                                <div><input type="checkbox" checked readonly> No</div>
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <span class="label">4. Total intended number of shipments:</span>
+                            <span class="value">1</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">5. Total intended quantity:</span>
+                            <span class="value">25.5 Tonnes (Mg)</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">6. Intended period of time for shipment(s):</span>
+                            <div class="value">
+                                <div>First Departure: 15/03/2024</div>
+                                <div>Last Departure: 15/03/2024</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-action-panel">
+                    <div class="review-section">
+                        <h4>Review Status</h4>
+                        <span class="status-indicator status-approved">Approved</span>
+                        <select class="status-select">
+                            <option value="pending">Pending</option>
+                            <option value="approved" selected>Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="correction_required">Correction Required</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Review comments...">Shipment details verified and approved.</textarea>
+                        <button class="update-btn">Update Review</button>
+                    </div>
+                    <div class="review-section">
+                        <h4>Evaluation Status</h4>
+                        <span class="status-indicator status-complete">Complete</span>
+                        <select class="status-select">
+                            <option value="pending">Pending</option>
+                            <option value="complete" selected>Complete</option>
+                            <option value="incomplete">Incomplete</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Evaluation notes...">All documentation complete.</textarea>
+                        <button class="update-btn">Update Evaluation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Block 2: Importer - consignee -->
+            <div class="block">
+                <div class="data-section">
+                    <h3 class="block-title">2. Importer - consignee</h3>
+                    <div class="block-content">
+                        <div class="detail">
+                            <span class="label">Registration No:</span>
+                            <span class="value">IMP-2024-005</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Name:</span>
+                            <span class="value">International Recovery Corp.</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Address:</span>
+                            <span class="value">456 Recovery Street, Import City, IC 67890</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Contact Person:</span>
+                            <span class="value">Maria González</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Email:</span>
+                            <span class="value">m.gonzalez@intrecovery.com</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Telephone:</span>
+                            <span class="value">+34-91-555-0456</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Fax:</span>
+                            <span class="value">+34-91-555-0457</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-action-panel">
+                    <div class="review-section">
+                        <h4>Review Status</h4>
+                        <span class="status-indicator status-correction">Correction Required</span>
+                        <select class="status-select">
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="correction_required" selected>Correction Required</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Review comments...">Contact person details need verification.</textarea>
+                        <button class="update-btn">Update Review</button>
+                    </div>
+                    <div class="review-section">
+                        <h4>Evaluation Status</h4>
+                        <span class="status-indicator status-incomplete">Incomplete</span>
+                        <select class="status-select">
+                            <option value="pending">Pending</option>
+                            <option value="complete">Complete</option>
+                            <option value="incomplete" selected>Incomplete</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Evaluation notes...">Awaiting updated contact information.</textarea>
+                        <button class="update-btn">Update Evaluation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Block 7: Packaging type(s) -->
+            <div class="block">
+                <div class="data-section">
+                    <h3 class="block-title">7. Packaging type(s)</h3>
+                    <div class="block-content">
+                        <div class="detail">
+                            <span class="label">Type:</span>
+                            <span class="value">Drum</span>
+                        </div>
+                        <div class="checkbox-group">
+                            <span>Special handling requirements:</span>
+                            <div>
+                                <div><input type="checkbox" checked readonly> Yes</div>
+                                <div><input type="checkbox" readonly> No</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-action-panel">
+                    <div class="review-section">
+                        <h4>Review Status</h4>
+                        <span class="status-indicator status-approved">Approved</span>
+                        <select class="status-select">
+                            <option value="pending">Pending</option>
+                            <option value="approved" selected>Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="correction_required">Correction Required</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Review comments...">Packaging specifications approved.</textarea>
+                        <button class="update-btn">Update Review</button>
+                    </div>
+                    <div class="review-section">
+                        <h4>Evaluation Status</h4>
+                        <span class="status-indicator status-complete">Complete</span>
+                        <select class="status-select">
+                            <option value="pending">Pending</option>
+                            <option value="complete" selected>Complete</option>
+                            <option value="incomplete">Incomplete</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Evaluation notes...">Packaging evaluation complete.</textarea>
+                        <button class="update-btn">Update Evaluation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Block 8: Intended carrier(s) -->
+            <div class="block full-width">
+                <div class="data-section">
+                    <h3 class="block-title">8. Intended carrier(s)</h3>
+                    <div class="block-content">
+                        <div class="carrier-item">
+                            <p><strong>Carrier 1</strong></p>
+                            <div class="detail">
+                                <span class="label">Name:</span>
+                                <span class="value">European Transport Solutions</span>
+                            </div>
+                            <div class="detail">
+                                <span class="label">Address:</span>
+                                <span class="value">789 Transport Road, Carrier City, CC 11111</span>
+                            </div>
+                            <div class="detail">
+                                <span class="label">Email:</span>
+                                <span class="value">logistics@ets.com</span>
+                            </div>
+                            <div class="detail">
+                                <span class="label">Telephone:</span>
+                                <span class="value">+49-30-555-0789</span>
+                            </div>
+                            <div class="detail">
+                                <span class="label">Means of transport:</span>
+                                <span class="value">Road</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-action-panel">
+                    <div class="review-section">
+                        <h4>Review Status</h4>
+                        <span class="status-indicator status-pending">Pending</span>
+                        <select class="status-select">
+                            <option value="pending" selected>Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="correction_required">Correction Required</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Review comments..."></textarea>
+                        <button class="update-btn">Update Review</button>
+                    </div>
+                    <div class="review-section">
+                        <h4>Evaluation Status</h4>
+                        <span class="status-indicator status-pending">Pending</span>
+                        <select class="status-select">
+                            <option value="pending" selected>Pending</option>
+                            <option value="complete">Complete</option>
+                            <option value="incomplete">Incomplete</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Evaluation notes..."></textarea>
+                        <button class="update-btn">Update Evaluation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Block 15: Countries/States Table -->
+            <div class="block full-width">
+                <div class="data-section">
+                    <h3 class="block-title">15. (a) Countries/States concerned, (b) Code no. of competent authorities where applicable, (c) Specific points of exit or entry</h3>
+                    <div class="block-content">
+                        <table class="countries-table">
+                            <thead>
+                                <tr>
+                                    <th>State of export - dispatch</th>
+                                    <th>State(s) of transit (entry and exit)</th>
+                                    <th>State of import - destination</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>(a) Country:</strong> Germany<br>
+                                        <strong>(c) Exit Point:</strong> Hamburg Port
+                                    </td>
+                                    <td>
+                                        <strong>(a) Country:</strong> Netherlands<br>
+                                        <strong>(c) Entry/Exit:</strong> Rotterdam Port - Amsterdam Airport
+                                    </td>
+                                    <td>
+                                        <strong>(a) Country:</strong> Spain<br>
+                                        <strong>(c) Entry Point:</strong> Barcelona Port
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="review-action-panel">
+                    <div class="review-section">
+                        <h4>Review Status</h4>
+                        <span class="status-indicator status-approved">Approved</span>
+                        <select class="status-select">
+                            <option value="pending">Pending</option>
+                            <option value="approved" selected>Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="correction_required">Correction Required</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Review comments...">Route approved by all transit authorities.</textarea>
+                        <button class="update-btn">Update Review</button>
+                    </div>
+                    <div class="review-section">
+                        <h4>Evaluation Status</h4>
+                        <span class="status-indicator status-complete">Complete</span>
+                        <select class="status-select">
+                            <option value="pending">Pending</option>
+                            <option value="complete" selected>Complete</option>
+                            <option value="incomplete">Incomplete</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Evaluation notes...">All transit permissions verified.</textarea>
+                        <button class="update-btn">Update Evaluation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Block 17: Declaration -->
+            <div class="block full-width">
+                <div class="data-section">
+                    <h3 class="block-title">17. Exporter's - notifier's / generator's - producer's declaration</h3>
+                    <div class="block-content">
+                        <p class="declaration-text">
+                            I certify that the information is complete and correct to my best knowledge. I also certify that legally enforceable written contractual obligations have been entered into and that any applicable insurance or other financial guarantee is or shall be in force covering the transboundary movement.
+                        </p>
+                        <div class="signature-area">
+                            <div>
+                                <div class="detail">
+                                    <span class="label">Exporter's - notifier's name:</span>
+                                    <span class="value">Global Waste Solutions Ltd.</span>
+                                </div>
+                                <div class="detail">
+                                    <span class="label">Date:</span>
+                                    <span class="value">06/08/2025</span>
+                                </div>
+                                <div class="detail">
+                                    <span class="label">Signature:</span>
+                                    <span class="value"><em>(To be signed upon submission)</em></span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="detail">
+                                    <span class="label">Generator's - producer's name:</span>
+                                    <span class="value">Global Waste Solutions Ltd.</span>
+                                </div>
+                                <div class="detail">
+                                    <span class="label">Date:</span>
+                                    <span class="value">06/08/2025</span>
+                                </div>
+                                <div class="detail">
+                                    <span class="label">Signature:</span>
+                                    <span class="value"><em>(To be signed upon submission)</em></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-action-panel">
+                    <div class="review-section">
+                        <h4>Review Status</h4>
+                        <span class="status-indicator status-pending">Pending</span>
+                        <select class="status-select">
+                            <option value="pending" selected>Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="correction_required">Correction Required</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Review comments..."></textarea>
+                        <button class="update-btn">Update Review</button>
+                    </div>
+                    <div class="review-section">
+                        <h4>Evaluation Status</h4>
+                        <span class="status-indicator status-pending">Pending</span>
+                        <select class="status-select">
+                            <option value="pending" selected>Pending</option>
+                            <option value="complete">Complete</option>
+                            <option value="incomplete">Incomplete</option>
+                        </select>
+                        <textarea class="comment-textarea" placeholder="Evaluation notes..."></textarea>
+                        <button class="update-btn">Update Evaluation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple interactive functionality for demonstration
+        document.addEventListener('DOMContentLoaded', function() {
+            const updateButtons = document.querySelectorAll('.update-btn');
+            
+            updateButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const panel = this.closest('.review-section');
+                    const select = panel.querySelector('.status-select');
+                    const statusIndicator = panel.querySelector('.status-indicator');
+                    const textarea = panel.querySelector('.comment-textarea');
+                    
+                    // Update status indicator
+                    const newStatus = select.value;
+                    statusIndicator.className = `status-indicator status-${newStatus}`;
+                    statusIndicator.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1).replace('_', ' ');
+                    
+                    // Simple feedback
+                    button.textContent = 'Updated!';
+                    button.style.background = '#27ae60';
+                    
+                    setTimeout(() => {
+                        button.textContent = 'Update ' + (panel.querySelector('h4').textContent.split(' ')[0]);
+                        button.style.background = '#3498db';
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

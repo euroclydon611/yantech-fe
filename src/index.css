@@ -1,0 +1,669 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Nunito", sans-serif;
+  /* font-family: "Roboto", sans-serif; */
+
+  color: #374151;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Base Colors */
+  --background: 214 30% 97%; /* #f4f7fc - light navy-tinted white */
+  --foreground: 218 60% 10%; /* #0a1628 - deep navy */
+
+  /* Muted/Neutral */
+  --muted: 214 20% 94%; /* #eef2fb - pale blue */
+  --muted-foreground: 218 15% 45%; /* subtle navy-gray */
+
+  /* Surfaces */
+  --popover: 0 0% 100%; /* #FFFFFF */
+  --popover-foreground: 218 60% 10%;
+  --card: 0 0% 100%;
+  --card-foreground: 218 60% 10%;
+
+  /* UI Elements */
+  --border: 214 20% 88%; /* soft blue-gray border */
+  --input: 214 20% 88%;
+
+  /* Primary Action - YANTEC Navy */
+  --primary: 218 60% 10%; /* #0A1628 */
+  --primary-foreground: 38 90% 57%; /* #F5A623 */
+
+  /* Secondary Action - Light Blue */
+  --secondary: 214 30% 92%; /* #e8eef8 */
+  --secondary-foreground: 218 40% 20%;
+
+  /* Accent - YANTEC Orange */
+  --accent: 38 90% 57%; /* #F5A623 */
+  --accent-foreground: 218 60% 10%;
+
+  /* Alerts */
+  --destructive: 0 84% 60%; /* #F44336 */
+  --destructive-foreground: 60 9.1% 97.8%;
+  --success: 142 76% 36%; /* #2E7D32 */
+  --success-foreground: 60 9.1% 97.8%;
+  --warning: 38 92% 50%; /* #FFC107 */
+  --warning-foreground: 60 9.1% 97.8%;
+
+  /* Focus Ring */
+  --ring: 38 90% 57%; /* YANTEC orange */
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --primary: 207 90% 54%;
+  --primary-foreground: 211 100% 99%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 240 4.9% 83.9%;
+  --radius: 0.5rem;
+
+  --success: 142 70% 29%;
+  --success-foreground: 0 0% 98%;
+  --warning: 38 92% 40%;
+  --warning-foreground: 0 0% 98%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans bg-background text-foreground antialiased;
+  }
+}
+
+@layer components {
+  .sidebar {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .avatar-placeholder {
+    @apply bg-primary-100 text-primary-600 flex items-center justify-center font-bold;
+  }
+
+  .badge-head {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800;
+  }
+
+  .badge-staff-id {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800;
+  }
+
+  .tab-content {
+    @apply hidden;
+  }
+
+  .tab-content.active {
+    @apply block;
+  }
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+}
+
+span,
+table,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Nunito", sans-serif;
+}
+
+/* sidebar css starts */
+.custom-sider {
+  overflow-y: auto;
+}
+
+.custom-sider::-webkit-scrollbar {
+  width: 2px;
+}
+
+.custom-sider::-webkit-scrollbar-thumb {
+  background-color: #1A3A6B !important;
+  border-radius: 5px !important;
+}
+
+.dark .custom-sider .ant-menu-submenu-open .ant-menu-sub {
+  background-color: #060f1e !important;
+}
+
+/* Ensure menu popups have solid background even in dark mode */
+.dark .ant-menu-submenu-popup .ant-menu,
+.dark .ant-menu-sub {
+  background-color: #060f1e !important;
+  padding: 8px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.6) !important;
+  border-radius: 8px !important;
+}
+
+/* Sidebar menu — YANTEC Engineering theme */
+.ant-menu-item-selected {
+  background: rgba(245, 166, 35, 0.18) !important;
+  color: #F5A623 !important;
+}
+
+.ant-menu-item-selected .ant-menu-title-content,
+.ant-menu-item-selected a {
+  color: #F5A623 !important;
+}
+
+.ant-menu-submenu-title {
+  font-size: 10px !important;
+  color: rgba(255, 255, 255, 0.80) !important;
+  font-weight: 600 !important;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.dark .highlight {
+  background-color: #48bdff;
+}
+
+.ant-menu-item,
+.ant-menu-submenu-title {
+  height: 30px !important;
+  line-height: 30px !important;
+  font-size: 10px !important;
+}
+
+/* Menu items */
+.ant-menu-item {
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+  border-radius: 4px !important;
+  margin: 1px 2px !important;
+  position: relative !important;
+}
+
+/* Hover state */
+.ant-menu-item:hover {
+  background: rgba(245, 166, 35, 0.10) !important;
+  color: #ffffff !important;
+}
+
+/* Submenu container styling */
+.ant-menu-submenu .ant-menu,
+.ant-menu-submenu-popup .ant-menu {
+  background: #060f1e !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(245, 166, 35, 0.12) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Sub-items */
+.ant-menu-sub .ant-menu-item {
+  color: rgba(255, 255, 255, 0.65) !important;
+  margin: 1px 2px !important;
+  height: 30px !important;
+  line-height: 30px !important;
+  font-size: 10px !important;
+}
+
+.ant-menu-sub .ant-menu-item:hover {
+  color: #ffffff !important;
+  background: rgba(245, 166, 35, 0.10) !important;
+}
+
+.ant-menu-sub .ant-menu-item-selected {
+  background: rgba(245, 166, 35, 0.18) !important;
+  color: #F5A623 !important;
+}
+
+/* custom checkbox */
+.custom-checkbox .ant-checkbox-inner {
+  width: 18px;
+  height: 20px;
+  border-radius: 3px; /* rounded */
+  border: 2px solid green;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.custom-checkbox:hover .ant-checkbox-inner {
+  border-color: #555;
+}
+
+/* Checked state */
+.custom-checkbox .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: blue !important;
+  border-color: blue !important;
+}
+
+/* Check icon color */
+.custom-checkbox .ant-checkbox-checked .ant-checkbox-inner::after {
+  border-color: white !important;
+}
+
+/* sidebar css ends */
+
+select {
+  appearance: none;
+}
+
+input,
+select,
+textarea {
+  outline: none;
+}
+
+.sidebar,
+.content {
+  font-family: "Nunito", sans-serif, system-ui, Helvetica, Arial;
+}
+
+.truncate-25 {
+  max-width: 25ch;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.truncate-60 {
+  max-width: 60ch;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Toggle switch container */
+.toggle-switch-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Toggle switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+}
+
+/* Toggle switch input */
+.toggle-switch input {
+  display: none;
+}
+
+/* Toggle slider */
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 33px;
+}
+
+/* Toggle slider round indicator */
+.toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 6px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* Adjust toggle switch when input is checked */
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #39afd1; /* Color when switch is on */
+}
+
+/* Adjust slider indicator position when input is checked */
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(29px); /* Move indicator to the right */
+}
+
+/* Apply to the table wrapper */
+.table-wrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+/* Customize the scrollbar for webkit-based browsers (Chrome, Safari) */
+.table-wrapper::-webkit-scrollbar {
+  width: 3px;
+  height: 5px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Define the keyframes for the movement */
+@keyframes moveLeftRight {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Apply the animation */
+.animate-icon {
+  animation: moveLeftRight 2s ease-in-out infinite;
+}
+
+/* Loader.css */
+.email_loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Transparent background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.email_loader {
+  text-align: center;
+  background: #fff;
+  padding: 20px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.email_spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db; /* Change this to match your theme */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.email_loader p {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Custom scrollbar styles */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 3px; /* Makes scrollbar thin */
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #d97706; /* Amber 500 */
+  border-radius: 2px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background-color: #e5e7eb; /* Gray 200 */
+}
+
+.swal-custom-popup {
+  z-index: 10000000 !important; /* Ensures it's higher than all other elements */
+}
+
+/* In your global CSS or SCSS */
+.swal2-container {
+  z-index: 9999 !important;
+}
+
+/* Overall filter section layout */
+.filter-section {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Header for the filter section */
+.filter-header {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Group the filters for alignment */
+.filters {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Container for each filter dropdown */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 180px;
+}
+
+/* Label styling */
+.filter-label {
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+/* Styling for the select dropdowns */
+.filter-select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f7f7f7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+/* Hover and focus effect for select */
+.filter-select:hover,
+.filter-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+/* Apply button style */
+.apply-filters {
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.apply-filters:hover {
+  background-color: #0056b3;
+}
+
+/* Space out the buttons from the filters */
+.apply-filters {
+  margin-top: 20px;
+}
+
+/* Officer Tasks Page Scrolling Optimizations */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Grid container optimizations */
+.grid.auto-rows-max {
+  align-content: start;
+}
+
+/* Officer Tasks specific scrolling fix */
+.overflow-y-auto.overflow-x-hidden {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+.overflow-y-auto.overflow-x-hidden::-webkit-scrollbar {
+  width: 8px;
+  background: #f1f1f1;
+}
+
+.overflow-y-auto.overflow-x-hidden::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.overflow-y-auto.overflow-x-hidden::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Officer Tasks Page Mobile Optimizations */
+@media (max-width: 768px) {
+  /* Custom scrollbar for mobile */
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+
+  /* Card optimizations */
+  .ant-card-body {
+    padding: 12px !important;
+  }
+
+  /* List item optimizations */
+  .ant-list-item {
+    padding: 12px !important;
+  }
+
+  /* Typography adjustments */
+  .ant-typography {
+    font-size: 12px !important;
+  }
+
+  /* Pagination mobile optimizations */
+  .ant-pagination-options {
+    display: none !important;
+  }
+
+  .ant-pagination-jump-prev,
+  .ant-pagination-jump-next {
+    display: none !important;
+  }
+}
+
+
+
+/* Full gradient across the rail */
+.hazard-slider .ant-slider-rail {
+  background: linear-gradient(to right, #22c55e 0%, #eab308 50%, #ef4444 100%);
+}
+
+/* Track should just cover up to the handle with no conflicting gradient */
+.hazard-slider .ant-slider-track {
+  background: transparent;
+}
