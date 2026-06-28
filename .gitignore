@@ -16,7 +16,7 @@ dist-ssr
 *.local
 .env
 .env.prod
-vite.config.ts
+#vite.config.ts
 
 
 
