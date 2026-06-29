@@ -208,18 +208,19 @@ const YELQuotations = () => {
   const [statusQ] = useYelQuotationStatusMutation();
   const [convertQ, { isLoading: converting }] = useYelQuotationConvertMutation();
   const [deleteQ] = useYelQuotationDeleteMutation();
-  const { data: clientsData } = useYelClientAllQuery();
+  const { data: clientsData, refetch: refetchClients } = useYelClientAllQuery();
   const { data: taxData } = useYelTaxConfigListQuery();
   const allActiveTaxConfigs = (taxData?.data ?? []).filter((c: any) => c.isActive).sort((a: any, b: any) => a.order - b.order);
   const selectedTaxIds: string[] = Form.useWatch("selectedTaxIds", form) ?? [];
 
   const load = () => fetchList({ page, limit, searchQuery, status: statusFilter });
   useEffect(() => { load(); }, [page, searchQuery, statusFilter]);
+  useEffect(() => { if (modalOpen) refetchClients(); }, [modalOpen]);
 
   const openCreate = () => {
     setEditTarget(null);
     form.resetFields();
-    form.setFieldsValue({ documentType: "standard", lineItems: [emptyItem()] });
+    form.setFieldsValue({ documentType: "standard", lineItems: [emptyItem()], issueDate: dayjs() });
     setModalOpen(true);
   };
   const openEdit = (r: any) => {
@@ -229,6 +230,7 @@ const YELQuotations = () => {
     form.setFieldsValue({
       ...r,
       client: r.client?._id ?? r.client,
+      issueDate: r.issueDate ? dayjs(r.issueDate) : dayjs(),
       validUntil: r.validUntil ? dayjs(r.validUntil) : null,
       lineItems: r.lineItems,
       documentType: r.documentType ?? "standard",
@@ -238,8 +240,8 @@ const YELQuotations = () => {
   };
 
   const handleSubmit = async (values: any) => {
-    const { lineItems: li, validUntil, ...rest } = values;
-    const payload = { ...rest, lineItems: li, validUntil: validUntil?.toISOString() };
+    const { lineItems: li, validUntil, issueDate, ...rest } = values;
+    const payload = { ...rest, lineItems: li, validUntil: validUntil?.toISOString(), issueDate: issueDate?.toISOString() };
     try {
       if (editTarget) {
         await updateQ({ id: editTarget._id, body: payload }).unwrap();
@@ -263,7 +265,7 @@ const YELQuotations = () => {
 
   const handleConvert = async (values: any) => {
     try {
-      await convertQ({ id: convertTarget._id, body: { dueDate: values.dueDate?.toISOString(), notes: values.notes } }).unwrap();
+      await convertQ({ id: convertTarget._id, body: { dueDate: values.dueDate?.toISOString(), issueDate: values.issueDate?.toISOString(), notes: values.notes } }).unwrap();
       toast.success("Converted to invoice");
       setConvertModal(false);
       convertForm.resetFields();
@@ -408,6 +410,9 @@ const YELQuotations = () => {
             <Form.Item label="Title" name="title" rules={[{ required: true }]}>
               <Input placeholder="HV Substation Supply & Installation" />
             </Form.Item>
+            <Form.Item label="Issue Date" name="issueDate" rules={[{ required: true }]}>
+              <DatePicker className="w-full" format="DD/MM/YYYY" />
+            </Form.Item>
             <Form.Item label="Valid Until" name="validUntil" rules={[{ required: true }]}>
               <DatePicker className="w-full" format="DD/MM/YYYY" />
             </Form.Item>
@@ -466,9 +471,14 @@ const YELQuotations = () => {
           <p className="text-xs text-gray-500 mb-4">
             This will create a new invoice based on <strong>{convertTarget?.quotationNumber}</strong> (GHS {convertTarget?.totalAmount?.toLocaleString("en-GH", { minimumFractionDigits: 2 })}) and mark the quotation as converted.
           </p>
-          <Form.Item label="Invoice Due Date" name="dueDate" rules={[{ required: true }]}>
-            <DatePicker className="w-full" format="DD/MM/YYYY" disabledDate={(d) => d && d.isBefore(dayjs(), "day")} />
-          </Form.Item>
+          <div className="grid grid-cols-2 gap-x-3">
+            <Form.Item label="Invoice Issue Date" name="issueDate" initialValue={dayjs()}>
+              <DatePicker className="w-full" format="DD/MM/YYYY" />
+            </Form.Item>
+            <Form.Item label="Invoice Due Date" name="dueDate" rules={[{ required: true }]}>
+              <DatePicker className="w-full" format="DD/MM/YYYY" />
+            </Form.Item>
+          </div>
           <Form.Item label="Additional Notes (optional)" name="notes">
             <Input.TextArea rows={2} />
           </Form.Item>
