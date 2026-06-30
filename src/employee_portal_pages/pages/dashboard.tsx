@@ -86,7 +86,7 @@ const EPAAdminDashboard = () => {
         <div>
           <div className="flex items-center gap-1.5">
             <EnvironmentOutlined className="text-sm" style={{ color: "#D4A017" }} />
-            <h1 className="text-sm font-bold text-gray-800 m-0">Ghana Sports Fund</h1>
+            <h1 className="text-sm font-bold text-gray-800 m-0">YANTEC Engineering</h1>
           </div>
           <p className="text-[10px] text-gray-500 mt-0.5 ml-5">Staff Portal — Finance Overview</p>
         </div>

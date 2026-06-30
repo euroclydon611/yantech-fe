@@ -134,7 +134,7 @@ const Entities = () => {
 
       <PageLayout
         title="Departments"
-        subtitle="Ghana Sports Fund — organizational structure"
+        subtitle="YANTEC Engineering — organizational structure"
         breadcrumbs={[{ label: "HR MGT" }, { label: "Departments" }]}
         actions={
           hasEntitiesCreateAccess ? (

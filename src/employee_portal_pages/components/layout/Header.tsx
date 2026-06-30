@@ -146,7 +146,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
           >
             <img
               src="/images/logo.png"
-              alt="Ghana Sports Fund"
+              alt="YANTEC Engineering"
               className="w-7 h-7 object-contain"
             />
           </Link>
