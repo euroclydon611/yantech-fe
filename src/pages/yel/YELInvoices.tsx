@@ -25,9 +25,10 @@ import dayjs from "dayjs";
 
 const { Option } = Select;
 
-const executePdfDownload = async (type: string, id: string, filename: string, includeBankDetails = false) => {
-  const params = includeBankDetails ? "?includeBankDetails=true" : "";
-  const url = `${import.meta.env.VITE_PUBLIC_SERVER_URI}yel/${type}/pdf/${id}${params}`;
+const executePdfDownload = async (type: string, id: string, filename: string, includeBankDetails = false, pageSize: "A3" | "A4" = "A4") => {
+  const params = new URLSearchParams({ pageSize });
+  if (includeBankDetails) params.set("includeBankDetails", "true");
+  const url = `${import.meta.env.VITE_PUBLIC_SERVER_URI}yel/${type}/pdf/${id}?${params}`;
   const res = await fetch(url, { credentials: "include" });
   if (!res.ok) { toast.error("Failed to generate PDF"); return; }
   const blob = await res.blob();
@@ -420,6 +421,7 @@ const YELInvoices = () => {
   const [form] = Form.useForm();
   const [pdfModal, setPdfModal] = useState<{ open: boolean; type: string; id: string; filename: string } | null>(null);
   const [includeBankDetails, setIncludeBankDetails] = useState(false);
+  const [pageSize, setPageSize] = useState<"A3" | "A4">("A4");
   const lineItems = Form.useWatch("lineItems", form) ?? [];
   const docType = Form.useWatch("documentType", form) ?? "standard";
   const selectedTaxIds: string[] = Form.useWatch("selectedTaxIds", form) ?? [];
@@ -539,7 +541,7 @@ const YELInvoices = () => {
           )}
           <Tooltip title="Download Invoice PDF">
             <button
-              onClick={() => { setIncludeBankDetails(false); setPdfModal({ open: true, type: "invoices", id: r._id, filename: `YANTEC-${r.invoiceNumber}.pdf` }); }}
+              onClick={() => { setIncludeBankDetails(false); setPageSize("A4"); setPdfModal({ open: true, type: "invoices", id: r._id, filename: `YANTEC-${r.invoiceNumber}.pdf` }); }}
               className="text-rose-600 hover:text-rose-800"
             >
               <FaFilePdf size={13} />
@@ -680,6 +682,7 @@ const YELInvoices = () => {
         onReceiptIssued={load}
         onInvoicePdfClick={(info: { type: string; id: string; filename: string }) => {
           setIncludeBankDetails(false);
+          setPageSize("A4");
           setPdfModal({ open: true, ...info });
         }}
       />
@@ -694,6 +697,15 @@ const YELInvoices = () => {
         destroyOnClose
       >
         <div className="py-2">
+          <p className="font-semibold text-sm text-gray-800 mb-2">Paper Size</p>
+          <Radio.Group
+            value={pageSize}
+            onChange={(e) => setPageSize(e.target.value)}
+            optionType="button"
+            buttonStyle="solid"
+            className="mb-4"
+            options={[{ label: "A4", value: "A4" }, { label: "A3", value: "A3" }]}
+          />
           <label className="flex items-center gap-3 cursor-pointer select-none p-3 rounded-lg border border-gray-200 hover:border-orange-400 transition-colors">
             <input
               type="checkbox"
@@ -713,7 +725,7 @@ const YELInvoices = () => {
               style={{ background: "#0A1628", borderColor: "#0A1628" }}
               onClick={() => {
                 if (pdfModal) {
-                  executePdfDownload(pdfModal.type, pdfModal.id, pdfModal.filename, includeBankDetails);
+                  executePdfDownload(pdfModal.type, pdfModal.id, pdfModal.filename, includeBankDetails, pageSize);
                   setPdfModal(null);
                 }
               }}
